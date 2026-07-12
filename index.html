@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Bedrock Addons Hub</title>
+    <style>
+        /* Estilos Base y Fondo de Minecraft */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.85)), 
+                        url('https://images.unsplash.com/photo-1607988795691-3d0147b43231?q=80&w=1920') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px #b026ff, 0 0 20px #b026ff;
+            letter-spacing: 2px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            background: rgba(16, 16, 20, 0.85);
+            border: 2px solid #b026ff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 0 20px rgba(176, 38, 255, 0.3);
+            margin-bottom: 40px;
+        }
+
+        /* Componente del Optimizador de Gama */
+        .specs-panel {
+            background: rgba(30, 30, 40, 0.9);
+            border: 1px solid #b026ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 30px;
+            box-shadow: inset 0 0 10px rgba(176, 38, 255, 0.2);
+        }
+
+        .gama-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+        .gama-alta { background-color: #00ffcc; color: #000; box-shadow: 0 0 10px #00ffcc; }
+        .gama-media { background-color: #ffcc00; color: #000; box-shadow: 0 0 10px #ffcc00; }
+        .gama-baja { background-color: #ff3366; color: #fff; box-shadow: 0 0 10px #ff3366; }
+
+        /* Formulario de Subida */
+        .upload-form {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        input, textarea {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #b026ff;
+            padding: 12px;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 10px #b026ff;
+        }
+
+        /* BOTONES NEÓN MORADOS CON BRILLO */
+        .btn-neon {
+            background: transparent;
+            color: #b026ff;
+            border: 2px solid #b026ff;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(176, 38, 255, 0.4), 
+                        inset 0 0 10px rgba(176, 38, 255, 0.2);
+            text-shadow: 0 0 5px #b026ff;
+        }
+
+        .btn-neon:hover {
+            color: #fff;
+            background: #b026ff;
+            box-shadow: 0 0 25px #b026ff, 
+                        0 0 40px #b026ff;
+        }
+
+        /* Grid de Addons */
+        .addons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .addon-card {
+            background: rgba(20, 20, 25, 0.9);
+            border: 2px solid #b026ff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 12px rgba(176, 38, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .addon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(176, 38, 255, 0.6);
+        }
+
+        .addon-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 2px solid #b026ff;
+        }
+
+        .addon-info {
+            padding: 15px;
+        }
+
+        .addon-info h3 {
+            margin: 0 0 10px 0;
+            color: #ffcc00;
+        }
+
+        .addon-info p {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MINECRAFT BEDROCK ADDONS</h1>
+    </header>
+
+    <div class="container">
+        <!-- Sección del Optimizador de Gama -->
+        <div class="specs-panel">
+            <h2>🛠️ Analizador de Rendimiento Celular</h2>
+            <p id="hardware-info">Calculando la potencia de tu dispositivo...</p>
+            <div id="gama-result"></div>
+        </div>
+
+        <!-- Formulario para subir contenido -->
+        <h2>🚀 Publicar Nuevo Addon en la Nube</h2>
+        <form class="upload-form" id="addonForm">
+            <input type="text" id="addonTitle" placeholder="Nombre del Addon" required>
+            <textarea id="addonDesc" placeholder="Descripción de lo que hace el addon..." rows="3" required></textarea>
+            <input type="url" id="addonImg" placeholder="Enlace de la Imagen (URL)" required>
+            <input type="url" id="addonLink" placeholder="Enlace de Descarga (Mediafire, Mega, etc.)" required>
+            <button type="submit" class="btn-neon">Subir a la Nube</button>
+        </form>
+
+        <hr style="border-color: #b026ff; margin: 40px 0;">
+
+        <!-- Contenedor donde se muestran los Addons -->
+        <h2>📦 Addons Disponibles</h2>
+        <div class="addons-grid" id="addonsGrid">
+            <p style="color: #666;">Cargando addons desde la nube de Firebase...</p>
+        </div>
+    </div>
+
+    <!-- CARGA DE LIBRERÍAS DE FIREBASE (Módulos oficiales) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // 1. CONFIGURACIÓN DE TU FIREBASE AQUÍ
+        // Reemplaza este bloque completo con las credenciales que te dio Firebase en el Paso 1
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY_AQUÍ",
+            authDomain: "TU_AUTH_DOMAIN.firebaseapp.com",
+            projectId: "TU_PROJECT_ID",
+            storageBucket: "TU_STORAGE_BUCKET.appspot.com",
+            messagingSenderId: "TU_SENDER_ID",
+            appId: "TU_APP_ID"
+        };
+
+        // Inicializar Firebase y la Base de Datos Firestore
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const addonsCollection = collection(db, "addons");
+
+        // 2. LÓGICA DEL OPTIMIZADOR / DETECTOR DE GAMA
+        function analizarDispositivo() {
+            const cores = navigator.hardwareConcurrency || 4;
+            const ram = navigator.deviceMemory || 4;
+            
+            let gama = "Media";
+            let badgeClass = "gama-media";
+            let recomendacion = "Ideal para texturas de 16x16 y addons medianos.";
+
+            if (cores >= 8 && ram >= 6) {
+                gama = "Alta";
+                badgeClass = "gama-alta";
+                recommendation = "¡Excelente! Puedes correr Shaders pesados, texturas de 64x64 y addons masivos.";
+            } else if (cores <= 4 && ram <= 3) {
+                gama = "Baja";
+                badgeClass = "gama-baja";
+                recomendacion = "Atención: Se recomienda usar addons ligeros y desactivar los cielos hermosos en Minecraft.";
+            }
+
+            document.getElementById('hardware-info').innerHTML = `Detectados: <strong>${cores} núcleos de CPU</strong> y aprox. <strong>${ram} GB de RAM</strong>.`;
+            document.getElementById('gama-result').innerHTML = `<span class="gama-badge ${badgeClass}">Gama ${gama}</span> <p style="margin-top: 8px; font-size: 0.9rem;">${recomendacion}</p>`;
+        }
+
+        // 3. LÓGICA DE FIREBASE: ESCUCHAR CAMBIOS EN TIEMPO REAL (Nube)
+        const grid = document.getElementById('addonsGrid');
+        
+        // Consultar la nube ordenando los addons más nuevos primero
+        const q = query(addonsCollection, orderBy("createdAt", "desc"));
+
+        onSnapshot(q, (snapshot) => {
+            grid.innerHTML = '';
+            
+            if(snapshot.empty) {
+                grid.innerHTML = '<p style="color: #666;">No hay addons publicados todavía.</p>';
+                return;
+            }
+
+            snapshot.forEach((doc) => {
+                const addon = doc.data();
+                const card = document.createElement('div');
+                card.className = 'addon-card';
+                card.innerHTML = `
+                    <img src="${addon.img}" alt="${addon.title}" onerror="this.src='https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=500'">
+                    <div class="addon-info">
+                        <h3>${addon.title}</h3>
+                        <p>${addon.desc}</p>
+                        <a href="${addon.link}" target="_blank"><button class="btn-neon" style="width: 100%; padding: 8px;">Descargar</button></a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        });
+
+        // 4. LÓGICA DE FIREBASE: GUARDAR NUEVO ADDON EN LA NUBE
+        const form = document.getElementById('addonForm');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const newAddon = {
+                title: document.getElementById('addonTitle').value,
+                desc: document.getElementById('addonDesc').value,
+                img: document.getElementById('addonImg').value,
+                link: document.getElementById('addonLink').value,
+                createdAt: new Date() // Marca de tiempo para ordenarlos
+            };
+
+            try {
+                // Sube el documento directamente a la nube de Firebase
+                await addDoc(addonsCollection, newAddon);
+                form.reset();
+                alert("¡Addon subido con éxito a la nube!");
+            } catch (error) {
+                console.error("Error al subir a Firebase: ", error);
+                alert("Hubo un error al conectar con la nube. Revisa tus llaves de Firebase.");
+            }
+        });
+
+        // Inicializar el analizador al cargar
+        analizarDispositivo();
+    </script>
+</body>
+  </html>
+      
